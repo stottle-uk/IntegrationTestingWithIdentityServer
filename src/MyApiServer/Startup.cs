@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,9 +46,9 @@ namespace MyApiServer
 
         private static void GetJwtBearerOptions(JwtBearerOptions options)
         {
-            options.Authority = "http://localhost:5000";
-            options.Audience = "http://localhost:5000/resources";
-            options.RequireHttpsMetadata = false;
+            options.Authority = Environment.GetEnvironmentVariable("IDENTITY_SERVER_AUTHORITY");
+            options.Audience = Environment.GetEnvironmentVariable("IDENTITY_SERVER_AUDIENCE");
+            options.RequireHttpsMetadata = bool.Parse(Environment.GetEnvironmentVariable("IDENTITY_SERVER_REQUIREHTTPSMETADATA"));
         }
     }
 }

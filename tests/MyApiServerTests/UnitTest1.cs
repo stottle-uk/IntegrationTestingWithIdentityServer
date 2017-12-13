@@ -5,6 +5,7 @@ using MyApiServer;
 using System.Net;
 using System.Net.Http;
 using Xunit;
+using System;
 
 namespace MyApiServerTests
 {
@@ -16,13 +17,14 @@ namespace MyApiServerTests
         public UnitTest1()
         {
             var webhost = new WebHostBuilder()
-            .UseUrls("http://*:8000")
-            .UseStartup<Startup>();
+                .UseUrls("http://*:8000")
+                .UseStartup<Startup>();
 
             var server = new TestServer(webhost);
             _httpClient = server.CreateClient();
 
-            var disco = DiscoveryClient.GetAsync("http://localhost:5000").Result;
+            var authority = Environment.GetEnvironmentVariable("IDENTITY_SERVER_AUTHORITY");
+            var disco = DiscoveryClient.GetAsync(authority).Result;
             _tokenClient = new TokenClient(disco.TokenEndpoint, "client", "secret");
         }
 
