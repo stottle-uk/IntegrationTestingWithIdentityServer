@@ -1,24 +1,29 @@
 #!/usr/bin/env bash
 
-CURDIR=`pwd`
+echo
+echo ==================================================================
+echo  Building and running Identity Server
+echo ==================================================================
+echo
 
-docker run --rm \
-           -d \
-           --name my-identity-server \
-           -v "${CURDIR}/src/MyIdentityServer/:/app" \
-           --workdir /app \
-           microsoft/dotnet:2.0-sdk dotnet run --project ./MyIdentityServer.csproj
+docker build -f ./src/MyIdentityServer/Dockerfile -t myidentityserver .
 
-docker run --rm \
-           --name my-api-server-tests \
-           -v "${CURDIR}/:/build" \
-           --workdir /build \
-           --net container:my-identity-server \
-           -e IDENTITY_SERVER_AUTHORITY=http://localhost:5000 \
-           -e IDENTITY_SERVER_AUDIENCE=http://localhost:5000/resources \
-           -e IDENTITY_SERVER_REQUIREHTTPSMETADATA=false \
-           microsoft/dotnet:2.0-sdk dotnet test ./tests/MyApiServerTests/MyApiServerTests.csproj
+docker run --rm -d -p 8002:8002 --name my-identity-server myidentityserver
 
-docker stop my-identity-server 
+echo
+echo ==================================================================
+echo  Building and running tests
+echo ==================================================================
+echo
 
-docker volume ls -qf dangling=true
+docker build -f ./tests/MyApiServerTests/Dockerfile -t myapi_tests .
+
+docker run --rm --net "host" --name my-api-server-tests myapi_tests
+
+echo
+echo ==================================================================
+echo  Tidy up - stop Identity Server
+echo ==================================================================
+echo
+
+docker stop my-identity-server

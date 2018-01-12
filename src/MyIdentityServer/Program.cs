@@ -20,10 +20,6 @@ namespace MyIdentityServer
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseKestrel(options =>
-                {
-                    options.Listen(IPAddress.Any, 5000);
-                })
                 .UseStartup<Startup>()
                 .Build();
     }

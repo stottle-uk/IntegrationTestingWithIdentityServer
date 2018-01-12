@@ -31,7 +31,7 @@ namespace MyApiServerTests
         [Fact]
         public async void ShouldNotAllowAnonymousUser()
         {
-            var result = await _httpClient.GetAsync("http://localhost:8000/api/values");
+            var result = await _httpClient.GetAsync("/api/values");
             Assert.Equal(HttpStatusCode.Unauthorized, result.StatusCode);
         }
 
@@ -41,7 +41,7 @@ namespace MyApiServerTests
             var tokenResponse = _tokenClient.RequestResourceOwnerPasswordAsync("alice", "password", "api1").Result;
             _httpClient.SetBearerToken(tokenResponse.AccessToken);
 
-            var result = await _httpClient.GetStringAsync("http://localhost:8000/api/values");
+            var result = await _httpClient.GetStringAsync("/api/values");
             Assert.Equal("[\"value1\",\"value2\"]", result);
         }
     }

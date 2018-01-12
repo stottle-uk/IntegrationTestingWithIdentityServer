@@ -20,10 +20,6 @@ namespace MyApiServer
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseKestrel(options =>
-                {
-                    options.Listen(IPAddress.Any, 8000);
-                })
                 .UseStartup<Startup>()
                 .Build();
     }

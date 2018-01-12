@@ -22,8 +22,8 @@ namespace MyApiServer
             services.AddMvc();
 
             services
-            .AddAuthentication(GetAuthenticationOptions)
-            .AddJwtBearer(GetJwtBearerOptions);
+                .AddAuthentication(GetAuthenticationOptions)
+                .AddJwtBearer(GetJwtBearerOptions);
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -34,8 +34,8 @@ namespace MyApiServer
             }
 
             app
-            .UseAuthentication()
-            .UseMvc();
+                .UseAuthentication()
+                .UseMvc();
         }
 
         private static void GetAuthenticationOptions(AuthenticationOptions options)
